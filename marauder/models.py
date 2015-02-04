@@ -24,14 +24,14 @@ class Floor(models.Model):
                               blank=True,
                               null=True)
 
+    # TODO: Delete this post transition
+    temp_id = models.IntegerField(help='The ID of the item in the old database. Used for transitioning')
+
     class Meta:
         unique_together = ('building_name', 'floor_number')
 
 
 class Location(models.Model):
-
-    class Meta:
-        unique_together = ('short_name', 'direction')
 
     short_name = models.CharField(max_length=15,
                                   help_text='The short name for the location')
@@ -48,6 +48,12 @@ class Location(models.Model):
     floor = models.ForeignKey(Floor,
                               help_text='The building and floor that this location belongs to')
 
+    # TODO: Delete this post transition
+    temp_id = models.IntegerField(help='The ID of the item in the old database. Used for transitioning')
+
+    class Meta:
+        unique_together = ('short_name', 'direction')
+
 
 class AccessPoint(models.Model):
     mac_address = models.CharField(max_length=17,
@@ -61,3 +67,6 @@ class AccessPoint(models.Model):
 
     location = models.ForeignKey(Location,
                                  help_text='The location that this AP belongs to')
+
+    # TODO: Delete this post transition
+    temp_id = models.IntegerField(help='The ID of the item in the old database. Used for transitioning')
