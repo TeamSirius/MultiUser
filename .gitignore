@@ -4,6 +4,7 @@ htmlcov/
 .idea/
 .DS_Store
 components/
+secret.py
 .sass-cache/
 *.bak
 *.key
