@@ -25,7 +25,11 @@ class Floor(models.Model):
                               null=True)
 
     # TODO: Delete this post transition
-    temp_id = models.IntegerField(help='The ID of the item in the old database. Used for transitioning')
+    temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
+
+
+    def __str__(self):
+        return "{} Floor {}".format(self.building_name, self.floor_number)
 
     class Meta:
         unique_together = ('building_name', 'floor_number')
@@ -49,7 +53,11 @@ class Location(models.Model):
                               help_text='The building and floor that this location belongs to')
 
     # TODO: Delete this post transition
-    temp_id = models.IntegerField(help='The ID of the item in the old database. Used for transitioning')
+    temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
+
+
+    def __str__(self):
+        return self.verbose_name
 
     class Meta:
         unique_together = ('short_name', 'direction')
@@ -69,4 +77,4 @@ class AccessPoint(models.Model):
                                  help_text='The location that this AP belongs to')
 
     # TODO: Delete this post transition
-    temp_id = models.IntegerField(help='The ID of the item in the old database. Used for transitioning')
+    temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
