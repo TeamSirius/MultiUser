@@ -78,3 +78,6 @@ class AccessPoint(models.Model):
 
     # TODO: Delete this post transition
     temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
+
+    def __str__(self):
+        return "{} -- {}".format(self.location, self.mac_address)
