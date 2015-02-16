@@ -26,7 +26,8 @@ class Floor(models.Model):
                                        blank=True,
                                        null=True)
 
-    image = models.ImageField(help_text='The image of the floor map for this floor',
+    image = models.ImageField(upload_to='floormaps',
+                              help_text='The image of the floor map for this floor',
                               width_field='image_width',
                               height_field='image_height',
                               blank=True,
@@ -34,6 +35,7 @@ class Floor(models.Model):
 
     # TODO: Delete this post transition
     temp_id = models.IntegerField(null=True,
+                                  blank=True,
                                   help_text='The ID of the item in the old database. Used for transitioning')
 
 
@@ -63,6 +65,7 @@ class Location(models.Model):
 
     # TODO: Delete this post transition
     temp_id = models.IntegerField(null=True,
+                                  blank=True,
                                   help_text='The ID of the item in the old database. Used for transitioning')
 
 
@@ -88,6 +91,7 @@ class AccessPoint(models.Model):
 
     # TODO: Delete this post transition
     temp_id = models.IntegerField(null=True,
+                                  blank=True,
                                   help_text='The ID of the item in the old database. Used for transitioning')
 
     def __str__(self):
