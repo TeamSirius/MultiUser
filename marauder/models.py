@@ -1,4 +1,12 @@
+import re
 from django.db import models
+from django.utils.timezone import now
+from django.contrib.auth.models import (BaseUserManager,
+                                        AbstractBaseUser,
+                                        PermissionsMixin)
+from django.utils.http import urlquote
+from django.core import validators
+from django.core.mail import send_mail
 
 
 class Floor(models.Model):
@@ -25,7 +33,8 @@ class Floor(models.Model):
                               null=True)
 
     # TODO: Delete this post transition
-    temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
+    temp_id = models.IntegerField(null=True,
+                                  help_text='The ID of the item in the old database. Used for transitioning')
 
 
     def __str__(self):
@@ -53,7 +62,8 @@ class Location(models.Model):
                               help_text='The building and floor that this location belongs to')
 
     # TODO: Delete this post transition
-    temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
+    temp_id = models.IntegerField(null=True,
+                                  help_text='The ID of the item in the old database. Used for transitioning')
 
 
     def __str__(self):
@@ -77,7 +87,58 @@ class AccessPoint(models.Model):
                                  help_text='The location that this AP belongs to')
 
     # TODO: Delete this post transition
-    temp_id = models.IntegerField(help_text='The ID of the item in the old database. Used for transitioning')
+    temp_id = models.IntegerField(null=True,
+                                  help_text='The ID of the item in the old database. Used for transitioning')
 
     def __str__(self):
         return "{} -- {}".format(self.location, self.mac_address)
+
+
+# class CustomUser(AbstractBaseUser, PermissionsMixin):
+#     email = models.EmailField(max_length=255,
+#                               unique=True,
+#                               help_text="The user's email address")
+#
+#     username = models.CharField('username', max_length=30, unique=True,
+#                                 help_text='Required. 30 Characters or less. Letters, numbers, and @/./+/-/_ characters',
+#                                 validators=[
+#                                     validators.RegexValidator(re.compile('^[\w.@+-]+$'), 'Enter a valid username', 'invalid')
+#                                 ])
+#
+#     full_name = models.CharField('full name', max_length=254)
+#
+#     short_name = models.CharField('short name', max_length=30)
+#
+#     is_staff = models.BooleanField('staff status', default=False,
+#                                    help_text='Whether the user can use the admin site')
+#
+#     is_active = models.BooleanField('active', default=False,
+#                                     help_text='Whether the user is active')
+#
+#     date_joined = models.DateTimeField('date joined',
+#                                        default=now())
+#
+#     objects = UserManager()
+#
+#     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = ['username', 'full_name', 'short_name']
+#
+#
+#     class Meta:
+#         verbose_name = 'user'
+#         verbose_name_plural = 'users'
+#
+#     def __unicode__(self):
+#         return self.full_name
+#
+#     def get_absolute_url(self):
+#         return '/users/{}/'.format(urlquote(self.username))
+#
+#     def get_full_name(self):
+#         return self.full_name.strip()
+#
+#     def get_short_name(self):
+#         return self.short_name.strip()
+#
+#     def email_user(self, subject, message, from_email=None):
+#         send_mail(subject, message, from_email, [self.email])
