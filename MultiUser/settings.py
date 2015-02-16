@@ -24,7 +24,7 @@ except ImportError:
         raise Exception(msg)
     default_db = 'sqlite:////{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
     DATABASES = {
-        'default': dj_database_url.config(defaut=default_db)
+        'default': dj_database_url.config(default=default_db)
     }
 
 
