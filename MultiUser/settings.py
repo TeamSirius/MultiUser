@@ -12,7 +12,20 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 try:
     from secret import *
 except ImportError:
-    print ("You don't have the secret file!")  # TODO: Switch to logging module
+    # This configuration allows us to use environment variables for Heroku
+    #   while still being able to use sqlite on our dev machines
+    import os
+    import dj_database_url
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if SECRET_KEY is None:
+        msg = 'Check your configuration. No secret.py and no SECRET_KEY environment variable.'
+        raise Exception(msg)
+    default_db = 'sqlite:////{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+    DATABASES = {
+        'default': dj_database_url.config(defaut=default_db)
+    }
 
 
 # Quick-start development settings - unsuitable for production
