@@ -75,7 +75,7 @@ class LocateMeResource(Resource):
 
         locate_me = LocateMeObject()
         locate_me.building_name = 'Halligan'
-        locate_me.floor_number = 2
+        locate_me.floor_number = 1
         locate_me.x_coordinate = 231
         locate_me.y_coordinate = 340
 
