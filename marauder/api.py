@@ -1,4 +1,4 @@
-from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
+from tastypie.resources import Resource, ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
 from .models import Floor, Location, AccessPoint
 from .authorizations import SiriusAuthorization, AuthenticateForPost
@@ -84,3 +84,7 @@ class AccessPointResource(ModelResource):
             'mac_address': ALL,
             'location': ALL_WITH_RELATIONS
         }
+
+
+
+
