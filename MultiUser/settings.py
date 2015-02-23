@@ -27,6 +27,11 @@ except ImportError:
         'default': dj_database_url.config(default=default_db)
     }
 
+    GCM_APIKEY = os.environ.get('GCM_APIKEY')
+
+    if GCM_APIKEY is None:
+        raise Exception('Can\'t find GCM key')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -63,8 +68,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
-
-
 
 ROOT_URLCONF = 'MultiUser.urls'
 
@@ -108,3 +111,12 @@ INSTALLED_APPS += (
 )
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['user_friends']
+
+# Django GCM Setup
+# https://github.com/bogdal/django-gcm
+
+INSTALLED_APPS += (
+    'gcm',
+)
+
+GCM_DEVICE_MODEL = 'marauder.models.UserDevice'

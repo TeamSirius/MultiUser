@@ -1,7 +1,10 @@
-from tastypie.resources import Resource, ModelResource, ALL, ALL_WITH_RELATIONS
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
+from tastypie.authentication import DigestAuthentication
 from .models import Floor, Location, AccessPoint
 from .authorizations import SiriusAuthorization, AuthenticateForPost
+
+from gcm.resources import DeviceResource
 
 
 class MultipartResource(object):
@@ -86,5 +89,15 @@ class AccessPointResource(ModelResource):
         }
 
 
+class UserDeviceResource(DeviceResource):
 
+    class Meta(DeviceResource.Meta):
+        authentication = DigestAuthentication()
 
+    def get_queryset(self):
+        qs = super(UserDeviceResource, self).get_queryset()
+        return qs.filter(user=self.request.user)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(UserDeviceResource, self).form_valid(form)
