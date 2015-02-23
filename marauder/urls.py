@@ -9,7 +9,10 @@ v1_api.register(LocationResource())
 v1_api.register(AccessPointResource())
 v1_api.register(LocateMeResource())
 
+#   url(r'^register-by-token/(?P<backend>[^/]+)/$',
+#       'register_by_access_token')
 
-urlpatterns = patterns('',
+urlpatterns = patterns('marauder.views',
     url(r'^api/', include(v1_api.urls)),
+    url(r'^register-by-token/(?P<backend>[^/]+)/$', 'register_by_access_token'),
 )

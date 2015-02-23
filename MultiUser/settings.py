@@ -64,6 +64,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
+
 ROOT_URLCONF = 'MultiUser.urls'
 
 WSGI_APPLICATION = 'MultiUser.wsgi.application'
@@ -93,3 +95,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
+
+# Python Social Auth Additions
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.Facebook2OAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+INSTALLED_APPS += (
+    'social.apps.django_app.default',
+)
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['user_friends']
