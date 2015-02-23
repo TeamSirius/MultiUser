@@ -1,6 +1,6 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
-from tastypie.authentication import DigestAuthentication
+from tastypie.authentication import ApiKeyAuthentication
 from .models import Floor, Location, AccessPoint
 from .authorizations import SiriusAuthorization, AuthenticateForPost
 
@@ -92,7 +92,7 @@ class AccessPointResource(ModelResource):
 class UserDeviceResource(DeviceResource):
 
     class Meta(DeviceResource.Meta):
-        authentication = DigestAuthentication()
+        authentication = ApiKeyAuthentication()
 
     def get_queryset(self):
         qs = super(UserDeviceResource, self).get_queryset()
