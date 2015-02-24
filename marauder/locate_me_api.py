@@ -1,4 +1,5 @@
 from tastypie.resources import Resource
+from tastypie.authentication import ApiKeyAuthentication
 from tastypie import fields
 from .api import CommonMeta
 import json

@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth import login
 from social.apps.django_app.utils import psa
+from social.apps.django_app.default.models import UserSocialAuth
 import json
 
 
@@ -27,3 +28,24 @@ def register_by_access_token(request, backend='facebook'):
         return HttpResponse(json.dumps(response))
     else:
         return HttpResponse(500)
+
+
+def request_location(request):
+    other_user = request.GET.get('friend_id')
+
+    try:
+        usa = UserSocialAuth.objects.get(uid=other_user)
+        device = usa.user.userdevice_set.first()
+
+        if device is None:
+            return HttpResponse(404)
+
+        msg = {
+            'type': 'request_location',
+            'requestor': 'Tyler Lubeck'
+        }
+        device.send_message(json.dumps(msg))
+        return HttpResponse(200)
+
+    except UserSocialAuth.DoesNotExist:
+        return HttpResponse(404)
