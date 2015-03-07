@@ -210,6 +210,8 @@ def getData(db_cursor=None):
     return res
 
 def kNN(test_aps, db_cursor=None):
+    if test_aps == []:
+        return (0, 0, 1)
     test_aps = {ap['mac_address'] : AccessPoint(ap, from_django=True) for ap in test_aps}
     trained_data = getData(db_cursor=db_cursor)
     locations = get_locations(trained_data)

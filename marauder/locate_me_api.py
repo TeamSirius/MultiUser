@@ -74,7 +74,6 @@ class LocateMeResource(Resource):
 
         (x, y, floor_id) = kNN(access_points['objects'], db_cursor=connection.cursor())
         floor = Floor.objects.get(pk=floor_id)
-
         
         locate_me = LocateMeObject()
         locate_me.building_name = floor.building_name
