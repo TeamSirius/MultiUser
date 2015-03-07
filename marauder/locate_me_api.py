@@ -2,6 +2,9 @@ from tastypie.resources import Resource
 from tastypie import fields
 from .api import CommonMeta
 import json
+from kNN import kNN
+from django.db import connection
+from .models import Floor
 
 # Most stuff from here:
 # http://stackoverflow.com/questions/20933214/creating-a-tastypie-resource-for-a-singleton-non-model-object
@@ -68,16 +71,16 @@ class LocateMeResource(Resource):
     def obj_create(self, bundle, **kwargs):
         """ Compute a location from a list of known access points"""
         access_points = json.loads(bundle.request.body)
-        for access_point in access_points:
-            print(access_points)
 
-        #TODO: Don't just hard code this
+        (x, y, floor_id) = kNN(access_points['objects'], db_cursor=connection.cursor())
+        floor = Floor.objects.get(pk=floor_id)
 
+        
         locate_me = LocateMeObject()
-        locate_me.building_name = 'Halligan'
-        locate_me.floor_number = 1
-        locate_me.x_coordinate = 231
-        locate_me.y_coordinate = 340
+        locate_me.building_name = floor.building_name
+        locate_me.floor_number = floor.floor_number
+        locate_me.x_coordinate = x
+        locate_me.y_coordinate = y
 
         bundle.obj = locate_me
         bundle = self.full_hydrate(bundle)
