@@ -8,13 +8,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+import os
 
 try:
     from secret import *
 except ImportError:
     # This configuration allows us to use environment variables for Heroku
     #   while still being able to use sqlite on our dev machines
-    import os
     import dj_database_url
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -27,11 +27,18 @@ except ImportError:
         'default': dj_database_url.config(default=default_db)
     }
 
+    # Get information for Android Push Notifications
     GCM_APIKEY = os.environ.get('GCM_APIKEY')
 
     if GCM_APIKEY is None:
         raise Exception('Can\'t find GCM key')
 
+    # Determine if we should use S3 Buckets or not
+    USE_S3 = os.environ.get('USE_S3', False)
+    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+    S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
+    S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
+    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -87,15 +94,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = 'staticfiles'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
 
@@ -120,3 +118,29 @@ INSTALLED_APPS += (
 )
 
 GCM_DEVICE_MODEL = 'marauder.models.UserDevice'
+
+# S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+# S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
+# S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY')
+# S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+# Static files (CSS, JavaScript, Images) # https://docs.djangoproject.com/en/1.7/howto/static-files/
+# Determine if we should use S3 to serve static files or not
+if USE_S3:
+    INSTALLED_APPS += ('storages',)
+    AWS_STORAGE_BUCKET_NAME = S3_BUCKET_NAME
+    AWS_ACCESS_KEY_ID = S3_ACCESS_KEY
+    AWS_SECRET_ACCESS_KEY = S3_SECRET_KEY
+    AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(S3_BUCKET_NAME)
+
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'MultiUser.storages.StaticStorage'
+    STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN,
+                                         STATICFILES_LOCATION)
+
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = 'staticfiles'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
