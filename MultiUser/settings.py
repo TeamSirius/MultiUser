@@ -133,9 +133,14 @@ if USE_S3:
     AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(S3_BUCKET_NAME)
 
     STATICFILES_LOCATION = 'static'
-    STATICFILES_STORAGE = 'MultiUser.storages.StaticStorage'
+    STATICFILES_STORAGE = 'MultiUser.custom_storages.StaticStorage'
     STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN,
                                          STATICFILES_LOCATION)
+
+    MEDIAFILES_LOCATION = 'media'
+    MEDIA_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN,
+                                        MEDIAFILES_LOCATION)
+    DEFAULT_FILE_STORAGE = 'MultiUser.custom_storages.MediaStorage'
 
 else:
     STATIC_URL = '/static/'
