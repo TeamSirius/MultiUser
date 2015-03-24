@@ -93,8 +93,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
 TASTYPIE_DEFAULT_FORMATS = ['json']
 
 # Python Social Auth Additions
@@ -133,7 +131,6 @@ if USE_S3:
     AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(S3_BUCKET_NAME)
 
     STATICFILES_LOCATION = 'static'
-<<<<<<< Updated upstream
     STATICFILES_STORAGE = 'MultiUser.custom_storages.StaticStorage'
     STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN,
                                          STATICFILES_LOCATION)
@@ -145,12 +142,6 @@ if USE_S3:
     STATICFILES_STORAGE = 'MultiUser.storages.StaticStorage'
     STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN,
                                          STATICFILES_LOCATION)
-=======
-    STATICFILES_STORAGE = 'MultiUser.storages.StaticStorage'
-    STATIC_URL = 'https://{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN,
-                                         STATICFILES_LOCATION)
-
->>>>>>> Stashed changes
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = 'staticfiles'
