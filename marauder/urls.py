@@ -20,5 +20,4 @@ v1_api.register(UserDeviceResource())
 urlpatterns = patterns('marauder.views',
     url(r'^api/', include(v1_api.urls)),
     url(r'^register-by-token/(?P<backend>[^/]+)/$', 'register_by_access_token'),
-    url(r'^request_location/$', 'request_location'),
 )
