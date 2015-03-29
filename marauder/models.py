@@ -65,8 +65,6 @@ class Location(models.Model):
     def __str__(self):
         return self.verbose_name
 
-    class Meta:
-        unique_together = ('short_name', 'direction')
 
 
 class AccessPoint(models.Model):
