@@ -107,6 +107,7 @@ class LocateMeResource(Resource):
         location_object.floor_number = floor.floor_number
         location_object.x_coordinate = location.x_coordinate
         location_object.y_coordinate = location.y_coordinate
+        location_object.image_url = floor.image.url
 
         return location_object
 
@@ -270,6 +271,7 @@ class LocateMeResource(Resource):
     def locate_me(self, request, **kwargs):
         """Used by a user to locate themselves within a building"""
         self._verify(request)
+        print request.body
         data = self.deserialize(request,
                                 request.body,
                                 format=request.META.get('Content-Type',
