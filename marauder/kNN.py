@@ -269,9 +269,8 @@ def getSQLLocations(db_cursor):
          from marauder_accesspoint
          join marauder_location
             on marauder_location.id=marauder_accesspoint.location_id
-        where floor_id = 4 or floor_id =5
          group by floor_id,marauder_accesspoint.location_id,x_coordinate,y_coordinate,direction""")
-    access_points = cur.fetchall()
+    access_points = db_cursor.fetchall()
     for ap in access_points:
         cur_aps = []
         temp_macs = ap[5].split(",")
