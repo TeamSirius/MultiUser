@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.db import connection
 from tastypie.resources import Resource
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.exceptions import ImmediateHttpResponse
@@ -8,10 +9,8 @@ from tastypie import fields
 from social.apps.django_app.default.models import UserSocialAuth
 from django.contrib.auth.models import User
 from .models import Floor
+from .kNN import kNN
 import json
-from kNN import kNN
-from django.db import connection
-import random
 import facebook
 import logging
 
@@ -90,23 +89,28 @@ class LocateMeResource(Resource):
         """ Will use Brett's kNN algorithm with the list of access points to
         determine the location. Currently, returned a random location within
         Halligan"""
-        # TODO: Don't return a random point
 
-        # Determine the random point
-        # Randomly choose a floor
-        floor = random.choice(
-            Floor.objects.filter(
-                building_name__icontains='halligan'))
+        modified_aps = {ap['mac_address']: ap['signal_strength']
+                        for ap in access_points}
+        found, x_coord, y_coord, floor_id = kNN(connection.cursor(), modified_aps)
 
-        # Randomly choose a location on that floor
-        location = random.choice(floor.location_set.all())
+        if not found:
+            msg = 'Could not locate you'
+            raise ImmediateHttpResponse(HttpNotFound(msg))
+
+        try:
+            floor = Floor.objects.get(pk=floor_id)
+        except Floor.DoesNotExist:
+            msg = 'Could not locate you'
+            raise ImmediateHttpResponse(HttpNotFound(msg))
+
 
         # Convert information to a location object
         location_object = LocateMeObject()
         location_object.building_name = floor.building_name
         location_object.floor_number = floor.floor_number
-        location_object.x_coordinate = location.x_coordinate
-        location_object.y_coordinate = location.y_coordinate
+        location_object.x_coordinate = x_coord
+        location_object.y_coordinate = y_coord
         location_object.image_url = floor.image.url
 
         return location_object
