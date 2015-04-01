@@ -92,6 +92,7 @@ class LocateMeResource(Resource):
 
         modified_aps = {ap['mac_address']: ap['signal_strength']
                         for ap in access_points}
+
         found, x_coord, y_coord, floor_id = kNN(connection.cursor(), modified_aps)
 
         if not found:
@@ -275,7 +276,6 @@ class LocateMeResource(Resource):
     def locate_me(self, request, **kwargs):
         """Used by a user to locate themselves within a building"""
         self._verify(request)
-        print request.body
         data = self.deserialize(request,
                                 request.body,
                                 format=request.META.get('Content-Type',
