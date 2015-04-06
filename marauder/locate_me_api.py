@@ -110,8 +110,8 @@ class LocateMeResource(Resource):
         location_object = LocateMeObject()
         location_object.building_name = floor.building_name
         location_object.floor_number = floor.floor_number
-        location_object.x_coordinate = x_coord
-        location_object.y_coordinate = y_coord
+        location_object.x_coordinate = int(x_coord)
+        location_object.y_coordinate = int(y_coord)
         location_object.image_url = floor.image.url
 
         return location_object
@@ -261,7 +261,8 @@ class LocateMeResource(Resource):
                 'building_name': location.building_name,
                 'floor_number': location.floor_number,
                 'x_coordinate': location.x_coordinate,
-                'y_coordinate': location.y_coordinate
+                'y_coordinate': location.y_coordinate,
+                'requestor_id': request.user.pk
             }
         else:
             msg = {
