@@ -140,8 +140,7 @@ class LocateMeResource(Resource):
         self._is_authorized(request)
         self.throttle_check(request)
 
-    def base_urls(self):
-        """Override the TastyPie URLs for this resource
+    def base_urls(self): """Override the TastyPie URLs for this resource
             because we don't need them
         """
         find_friend_url = r'^(?P<resource_name>{})/friend/$'
@@ -262,7 +261,8 @@ class LocateMeResource(Resource):
                 'floor_number': location.floor_number,
                 'x_coordinate': location.x_coordinate,
                 'y_coordinate': location.y_coordinate,
-                'friend_id': request.user.pk
+                'friend_id': request.user.pk,
+                'image_url': location.image_url,
             }
         else:
             msg = {
