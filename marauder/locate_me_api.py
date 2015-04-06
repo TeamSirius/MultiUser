@@ -262,12 +262,13 @@ class LocateMeResource(Resource):
                 'floor_number': location.floor_number,
                 'x_coordinate': location.x_coordinate,
                 'y_coordinate': location.y_coordinate,
-                'requestor_id': request.user.pk
+                'friend_id': request.user.pk
             }
         else:
             msg = {
                 'type': 'request_denied',
                 'friend': request.user.get_full_name(),
+                'friend_id': request.user.pk
             }
 
         response_class = self._notify_user(requestor_device_set, msg)
