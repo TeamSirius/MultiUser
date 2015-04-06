@@ -140,7 +140,8 @@ class LocateMeResource(Resource):
         self._is_authorized(request)
         self.throttle_check(request)
 
-    def base_urls(self): """Override the TastyPie URLs for this resource
+    def base_urls(self):
+        """Override the TastyPie URLs for this resource
             because we don't need them
         """
         find_friend_url = r'^(?P<resource_name>{})/friend/$'
